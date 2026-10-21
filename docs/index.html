@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Easel Studio</title>
+<meta name="description" content="Six creative apps for Mac: photo, video, audio, animation, vector art and PDFs. Free, native and on-device.">
+<link rel="icon" href="icons/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fbfaf8;
+    --surface: #ffffff;
+    --surface-2: #f3f1ed;
+    --text: #17151a;
+    --muted: #5f5a66;
+    --faint: #8d8794;
+    --line: #e6e2dc;
+    --accent: #6b45fa;
+    --accent-text: #ffffff;
+    --code-bg: #17151a;
+    --code-text: #f3f1ed;
+    --shadow: 0 1px 2px rgb(20 15 30 / 0.05), 0 8px 24px rgb(20 15 30 / 0.06);
+    --glow: radial-gradient(60% 60% at 50% 0%, rgb(107 69 250 / 0.13), transparent 70%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111014;
+      --surface: #19171d;
+      --surface-2: #211f26;
+      --text: #f2f0f5;
+      --muted: #aba5b3;
+      --faint: #7b7584;
+      --line: #2c2932;
+      --accent: #8f72ff;
+      --accent-text: #ffffff;
+      --code-bg: #0b0a0d;
+      --code-text: #e9e6ee;
+      --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.25);
+      --glow: radial-gradient(60% 60% at 50% 0%, rgb(143 114 255 / 0.18), transparent 70%);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111014;
+    --surface: #19171d;
+    --surface-2: #211f26;
+    --text: #f2f0f5;
+    --muted: #aba5b3;
+    --faint: #7b7584;
+    --line: #2c2932;
+    --accent: #8f72ff;
+    --accent-text: #ffffff;
+    --code-bg: #0b0a0d;
+    --code-text: #e9e6ee;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.25);
+    --glow: radial-gradient(60% 60% at 50% 0%, rgb(143 114 255 / 0.18), transparent 70%);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, pre { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  @media (max-width: 600px) { .wrap { padding: 0 16px; } }
+
+  /* Header */
+  header.top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: saturate(1.4) blur(12px); border-bottom: 1px solid var(--line); }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+  .brand:hover { text-decoration: none; }
+  .brand img { width: 28px; height: 28px; }
+  nav.links { display: flex; gap: 22px; font-size: 14px; }
+  nav.links a { color: var(--muted); }
+  nav.links a:hover { color: var(--text); text-decoration: none; }
+  @media (max-width: 640px) { nav.links .hide-sm { display: none; } }
+
+  /* Hero */
+  .hero { position: relative; padding: 88px 0 56px; text-align: center; }
+  .hero::before { content: ""; position: absolute; inset: 0; background: var(--glow); pointer-events: none; }
+  .icons { position: relative; display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+  .icons img { width: 64px; height: 64px; transition: transform .2s ease; }
+  .icons img:hover { transform: translateY(-4px) rotate(-3deg); }
+  @media (max-width: 480px) { .icons img { width: 46px; height: 46px; } .icons { gap: 6px; } }
+  h1 { position: relative; margin: 0 auto; max-width: 780px; font-size: clamp(36px, 6vw, 60px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 800; text-wrap: balance; }
+  .lede { position: relative; margin: 20px auto 0; max-width: 620px; font-size: clamp(17px, 2.2vw, 19px); color: var(--muted); text-wrap: pretty; }
+  .cta { position: relative; display: flex; justify-content: center; gap: 12px; margin-top: 34px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 9px; height: 46px; padding: 0 20px; border-radius: 12px; font-weight: 600; font-size: 15px; border: 1px solid var(--line); background: var(--surface); color: var(--text); box-shadow: var(--shadow); transition: transform .12s ease, border-color .12s ease; }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); border-color: var(--faint); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+  .meta { position: relative; margin-top: 16px; font-size: 13px; color: var(--faint); }
+
+  /* Terminal one-liner */
+  .term { position: relative; max-width: 680px; margin: 30px auto 0; text-align: left; }
+  .term-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+  .cmd { display: flex; align-items: center; gap: 8px; background: var(--code-bg); color: var(--code-text); border-radius: 12px; padding: 6px 6px 6px 16px; font-size: 14px; }
+  .cmd code { flex: 1; overflow-x: auto; white-space: nowrap; padding: 8px 0; scrollbar-width: none; }
+  .cmd code::-webkit-scrollbar { display: none; }
+  .cmd .p { color: #8d8794; user-select: none; margin-right: 8px; }
+  .copy { flex: none; height: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid rgb(255 255 255 / 0.15); background: rgb(255 255 255 / 0.06); color: inherit; font: 500 13px Inter, sans-serif; cursor: pointer; }
+  .copy:hover { background: rgb(255 255 255 / 0.12); }
+
+  /* Sections */
+  section { padding: 64px 0; }
+  section + section { border-top: 1px solid var(--line); }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+  h2 { margin: 0 0 12px; font-size: clamp(26px, 4vw, 36px); letter-spacing: -0.025em; line-height: 1.15; font-weight: 750; text-wrap: balance; }
+  .sub { margin: 0 0 36px; color: var(--muted); max-width: 640px; }
+
+  /* App cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  @media (max-width: 360px) { .grid { grid-template-columns: 1fr; } }
+  .card { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; box-shadow: var(--shadow); min-width: 0; }
+  .card-head { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+  .card-head img { width: 56px; height: 56px; flex: none; }
+  .card h3 { margin: 0; font-size: 20px; letter-spacing: -0.015em; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 500; color: var(--muted); background: var(--surface-2); border-radius: 999px; padding: 1px 9px; margin-top: 2px; }
+  .new { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+  .card p { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
+  .card ul { margin: 0 0 18px; padding: 0; list-style: none; font-size: 14px; display: grid; gap: 5px; }
+  .card li { position: relative; padding-left: 18px; }
+  .card li::before { content: ""; position: absolute; left: 2px; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .7; }
+  .solo { margin-top: auto; display: flex; align-items: center; gap: 6px; background: var(--surface-2); border-radius: 10px; padding: 4px 4px 4px 12px; font-size: 12px; min-width: 0; }
+  .solo code { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+  .solo button { flex: none; height: 28px; padding: 0 10px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font: 500 12px Inter, sans-serif; cursor: pointer; }
+  .solo button:hover { border-color: var(--faint); }
+
+  /* Flows */
+  .flows { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+  @media (max-width: 380px) { .flows { grid-template-columns: 1fr; } }
+  .flow { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); min-width: 0; }
+  .pair { display: flex; align-items: center; gap: 4px; flex: none; }
+  .pair img { width: 30px; height: 30px; }
+  .pair span { color: var(--faint); font-size: 14px; }
+  .flow b { display: block; font-size: 15px; }
+  .flow div { font-size: 14px; color: var(--muted); min-width: 0; }
+  .note { margin-top: 20px; font-size: 14px; color: var(--muted); }
+  .note code { font-size: 13px; background: var(--surface-2); padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+
+  /* Install options */
+  .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .opt { border: 1px solid var(--line); border-radius: 16px; padding: 22px; background: var(--surface); }
+  .opt h3 { margin: 0 0 6px; font-size: 17px; }
+  .opt p { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+  .opt .btn { height: 40px; font-size: 14px; }
+  .steps { margin: 28px 0 0; padding: 20px 22px; border-radius: 16px; background: var(--surface-2); font-size: 15px; }
+  .steps h3 { margin: 0 0 8px; font-size: 16px; }
+  .steps ol { margin: 0; padding-left: 20px; color: var(--muted); }
+  .steps li { margin: 4px 0; }
+  .steps code { font-size: 13px; background: var(--surface); padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+  pre.block { margin: 0; background: var(--code-bg); color: var(--code-text); padding: 18px 20px; border-radius: 14px; overflow-x: auto; font-size: 14px; line-height: 1.7; }
+  pre.block .c { color: #8d8794; }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--faint); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="icons/easel.png" alt="">Easel Studio</a>
+    <nav class="links">
+      <a href="#apps">Apps</a>
+      <a class="hide-sm" href="#together">Together</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/Infernalkingjr/easel-studio">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero wrap">
+    <div class="icons" aria-hidden="true">
+      <img src="icons/easel.png" alt=""><img src="icons/reel.png" alt=""><img src="icons/tone.png" alt="">
+      <img src="icons/flip.png" alt=""><img src="icons/quill.png" alt=""><img src="icons/folio.png" alt="">
+    </div>
+    <h1>Six creative apps for your Mac, and they work together.</h1>
+    <p class="lede">Edit photos, cut video, mix audio, animate, draw vectors and read PDFs. They're native and free, and everything runs on your Mac.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/Infernalkingjr/easel-studio/releases/latest/download/EaselStudio.dmg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+        Download for Mac
+      </a>
+      <a class="btn" href="#install">Other ways to install</a>
+    </div>
+    <div class="meta">macOS 14 Sonoma or later · Apple silicon and Intel · 13 MB</div>
+    <div class="term">
+      <div class="term-label">Or install everything from Terminal:</div>
+      <div class="cmd"><code><span class="p">$</span><span id="oneliner">curl -fsSL https://infernalkingjr.github.io/easel-studio/install.sh | bash</span></code><button class="copy" data-copy="#oneliner">Copy</button></div>
+    </div>
+  </div>
+
+  <section id="apps">
+    <div class="wrap">
+      <p class="eyebrow">The apps</p>
+      <h2>Everything you need, nothing you don't.</h2>
+      <p class="sub">Each app does one job well. Install all six, or only the ones you want.</p>
+      <div class="grid">
+        <article class="card">
+          <div class="card-head"><img src="icons/easel.png" alt=""><div><h3>Easel</h3><span class="tag">Photo editing</span></div></div>
+          <p>Layered photo editing with on-device AI tools.</p>
+          <ul><li>Layers, masks and adjustments</li><li>AI background removal and tools</li><li>14 export formats</li></ul>
+          <div class="solo"><code id="c-easel">curl -fsSL https://infernalkingjr.github.io/easel-studio/install.sh | bash -s -- easel</code><button data-copy="#c-easel">Copy</button></div>
+        </article>
+        <article class="card">
+          <div class="card-head"><img src="icons/reel.png" alt=""><div><h3>Reel</h3><span class="tag">Video editing</span></div></div>
+          <p>A timeline editor for cutting clips, titles and music together.</p>
+          <ul><li>13 transitions and titles</li><li>Automatic captions from speech</li><li>H.264, HEVC and GIF export</li></ul>
+          <div class="solo"><code id="c-reel">curl -fsSL https://infernalkingjr.github.io/easel-studio/install.sh | bash -s -- reel</code><button data-copy="#c-reel">Copy</button></div>
+        </article>
+        <article class="card">
+          <div class="card-head"><img src="icons/tone.png" alt=""><div><h3>Tone</h3><span class="tag">Audio</span></div></div>
+          <p>Record, mix and repair sound.</p>
+          <ul><li>Multitrack recording</li><li>Mixer with effects</li><li>Noise, hum and click restoration</li></ul>
+          <div class="solo"><code id="c-tone">curl -fsSL https://infernalkingjr.github.io/easel-studio/install.sh | bash -s -- tone</code><button data-copy="#c-tone">Copy</button></div>
+        </article>
+        <article class="card">
+          <div class="card-head"><img src="icons/flip.png" alt=""><div><h3>Flip</h3><span class="tag">2D animation</span></div></div>
+          <p>Frame-by-frame animation, with motion tweens when you want them.</p>
+          <ul><li>Drawing with onion skin</li><li>Motion tweens</li><li>Video and GIF export</li></ul>
+          <div class="solo"><code id="c-flip">curl -fsSL https://infernalkingjr.github.io/easel-studio/install.sh | bash -s -- flip</code><button data-copy="#c-flip">Copy</button></div>
+        </article>
+        <article class="card">
+          <div class="card-head"><img src="icons/quill.png" alt=""><div><h3>Quill</h3><span class="tag">Vector art</span></div></div>
+          <p>Crisp illustration and logos that scale to any size.</p>
+          <ul><li>Bézier pen, shapes and type</li><li>Pathfinder, gradients and layers</li><li>SVG, PDF and PNG export</li></ul>
+          <div class="solo"><code id="c-quill">curl -fsSL https://infernalkingjr.github.io/easel-studio/install.sh | bash -s -- quill</code><button data-copy="#c-quill">Copy</button></div>
+        </article>
+        <article class="card">
+          <div class="card-head"><img src="icons/folio.png" alt=""><div><h3>Folio</h3><span class="tag">PDF reader</span> <span class="tag new">New</span></div></div>
+          <p>A fast, quiet reader for PDFs, with tools for marking them up.</p>
+          <ul><li>Search, contents and thumbnails</li><li>Highlights, underlines and notes</li><li>Bookmarks, night and sepia modes</li><li>Rotate, insert and delete pages</li></ul>
+          <div class="solo"><code id="c-folio">curl -fsSL https://infernalkingjr.github.io/easel-studio/install.sh | bash -s -- folio</code><button data-copy="#c-folio">Copy</button></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="together">
+    <div class="wrap">
+      <p class="eyebrow">Better together</p>
+      <h2>Send work from one app to the next.</h2>
+      <p class="sub">The apps hand files to each other. Round-trip edits always work on copies, so your originals never change.</p>
+      <div class="flows">
+        <div class="flow"><span class="pair"><img src="icons/easel.png" alt="Easel"><span>→</span><img src="icons/reel.png" alt="Reel"></span><div><b>Easel to Reel, Flip, Quill and Folio</b>Send to adds your image as a clip, an animation layer, artwork or a PDF page.</div></div>
+        <div class="flow"><span class="pair"><img src="icons/reel.png" alt="Reel"><span>⇄</span><img src="icons/easel.png" alt="Easel"></span><div><b>Edit in Easel</b>Open a photo clip in Easel. When you press ⌘S there, Reel updates. Frame → Easel grabs a video frame.</div></div>
+        <div class="flow"><span class="pair"><img src="icons/reel.png" alt="Reel"><span>⇄</span><img src="icons/tone.png" alt="Tone"></span><div><b>Edit in Tone</b>Clean up a music clip in Tone, and the soundtrack in Reel updates. Send Mix to Reel adds new music.</div></div>
+        <div class="flow"><span class="pair"><img src="icons/flip.png" alt="Flip"><span>→</span><img src="icons/reel.png" alt="Reel"></span><div><b>Flip to Reel</b>Animations drop into your video, and transparent backgrounds stay transparent.</div></div>
+        <div class="flow"><span class="pair"><img src="icons/quill.png" alt="Quill"><span>→</span><img src="icons/folio.png" alt="Folio"></span><div><b>Quill to Folio</b>Artwork arrives as a vector PDF, so it stays sharp. Quill also sends PNGs to Easel, Reel and Flip.</div></div>
+        <div class="flow"><span class="pair"><img src="icons/folio.png" alt="Folio"><span>→</span><img src="icons/easel.png" alt="Easel"></span><div><b>Folio to Easel or Reel</b>Send any PDF page as a picture to edit it or put it in a video.</div></div>
+      </div>
+      <p class="note">Shared files live in <code>~/Library/Application Support/Easel Studio/</code>.</p>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <p class="eyebrow">Install</p>
+      <h2>Pick the installer you like.</h2>
+      <p class="sub">All three install the same apps into your Applications folder.</p>
+      <div class="options">
+        <div class="opt">
+          <h3>Disk image (.dmg)</h3>
+          <p>Open it, then drag the apps you want onto Applications.</p>
+          <a class="btn primary" href="https://github.com/Infernalkingjr/easel-studio/releases/latest/download/EaselStudio.dmg">Download .dmg</a>
+        </div>
+        <div class="opt">
+          <h3>Installer package (.pkg)</h3>
+          <p>A step-by-step installer that lets you tick which apps to install.</p>
+          <a class="btn" href="https://github.com/Infernalkingjr/easel-studio/releases/latest/download/EaselStudio.pkg">Download .pkg</a>
+        </div>
+        <div class="opt">
+          <h3>Terminal</h3>
+          <p>One command, with no security prompts. Add app names to install only those, or <code>--uninstall</code> to remove them.</p>
+          <a class="btn" href="install.sh">View install.sh</a>
+        </div>
+      </div>
+      <div class="steps">
+        <h3>Opening the apps the first time</h3>
+        <ol>
+          <li>Easel Studio isn't notarized by Apple yet, so macOS may say an app “can't be opened” or “is damaged”.</li>
+          <li>Right-click (Control-click) the app in Applications and choose <b>Open</b>, then <b>Open</b> again. Or go to System Settings → Privacy &amp; Security and click <b>Open Anyway</b>.</li>
+          <li>For the .pkg, do the same: right-click it and choose Open.</li>
+          <li>You only have to do this once per app. The Terminal installer skips it entirely.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="build">
+    <div class="wrap">
+      <p class="eyebrow">Open source</p>
+      <h2>Build it yourself.</h2>
+      <p class="sub">You need Swift 5.9 or later (Xcode or the Command Line Tools) on macOS 14 or later.</p>
+<pre class="block"><span class="c"># get the code</span>
+git clone https://github.com/Infernalkingjr/easel-studio.git
+cd easel-studio
+
+<span class="c"># build all six apps into build/ (or name one: easel, reel, tone, flip, quill, folio)</span>
+./Scripts/build_app.sh
+
+<span class="c"># package build/ as dist/EaselStudio.dmg, .pkg and .zip</span>
+./Scripts/make_installers.sh</pre>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Easel Studio · Made for macOS</span>
+    <span><a href="https://github.com/Infernalkingjr/easel-studio">Source</a> · <a href="https://github.com/Infernalkingjr/easel-studio/releases">Releases</a></span>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll("[data-copy]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var el = document.querySelector(btn.getAttribute("data-copy"));
+      var text = el ? el.textContent.trim() : "";
+      var done = function () {
+        var old = btn.textContent;
+        btn.textContent = "Copied";
+        setTimeout(function () { btn.textContent = old; }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () {});
+      } else {
+        var r = document.createRange();
+        r.selectNodeContents(el);
+        var s = window.getSelection();
+        s.removeAllRanges();
+        s.addRange(r);
+        try { document.execCommand("copy"); done(); } catch (e) {}
+      }
+    });
+  });
+</script>
+</body>
+</html>
